@@ -5,6 +5,7 @@ const categories = require("../data/categories");
 
 const router = express.Router();
 
+// Add categories
 router.route("/")
     .post(verifyUser,async (req, res) => {
         try{

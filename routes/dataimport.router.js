@@ -5,6 +5,7 @@ const hotels = require("../data/hotels");
 
 const router = express.Router();
 
+// Add Hotels
 router.route("/")
     .post(verifyUser,async (req, res) => {
         try{

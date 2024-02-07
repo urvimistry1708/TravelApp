@@ -6,6 +6,7 @@ const Wishlist = require("../model/wishlist.model");
 
 const router = express.Router();
 
+// Add hotel to wishlist
 router.route("/")
     .post(verifyUser, async (req, res) => {
         const newWishlist = new Wishlist(req.body);

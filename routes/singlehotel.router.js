@@ -3,6 +3,7 @@ const router = express.Router();
 
 const Hotel = require("../model/hotel.model");
 
+// Get Single hotel
 router.route("/:id")
     .get(async (req, res) => {
         try {

@@ -3,7 +3,7 @@ const router = express.Router();
 const hotels = require("../data/hotels")
 const Hotel= require("../model/hotel.model")
 
-
+// Get hotels
 router.route("/").get(async (req, res) => {
     const hotelCategory = req.query.category
     try{

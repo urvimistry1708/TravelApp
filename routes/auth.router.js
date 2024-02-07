@@ -9,6 +9,7 @@ const verifyUser = require("../middleware/verifyuser");
 
 const router = express.Router();
 
+// User registration validation
 const validateRegister = [
   body('username').isLength({ min: 3 }).withMessage('Username must be at least 3 characters long'),
   body('number').isMobilePhone('any').withMessage('Invalid phone number'),
@@ -27,6 +28,7 @@ const validateRegister = [
   }
 ];
 
+// User update validation
 const validateUpdate = [
   body('username').isLength({ min: 3 }).withMessage('Username must be at least 3 characters long'),
   body('number').isMobilePhone('any').withMessage('Invalid phone number'),
@@ -44,6 +46,7 @@ const validateUpdate = [
   }
 ];
 
+// login validation
 const validateLogin = [
   body('number').isMobilePhone('any').withMessage('Invalid phone number'),
   body("password").notEmpty().withMessage("Password is required!"),
@@ -59,6 +62,7 @@ const validateLogin = [
   }
 ]
 
+// User registration
 router.route("/register")
   .post(validateRegister, async (req, res) => {
     try {
@@ -76,22 +80,22 @@ router.route("/register")
     }
   })
 
+// User login
 router.route("/login")
   .post(validateLogin, async (req, res) => {
     try {
       const user = await User.findOne({ number: req.body.number });
 
-      if(!user)
-      {
+      if (!user) {
         return res.status(401).json({ message: "Incorrect Mobile Number" });
       }
-     
+
 
       const decodedPassword = CryptoJS.AES.decrypt(user.password, process.env.PASSWORD_SECRET_KEY).toString(CryptoJS.enc.Utf8);
       decodedPassword !== req.body.password && res.status(401).json({ message: "Incorrect Password" });
 
       const { password, ...rest } = user._doc;
-      const accessToken = jwt.sign({ username: user.username }, process.env.ACCESS_TOKEN,{ expiresIn: 3600 })
+      const accessToken = jwt.sign({ username: user.username }, process.env.ACCESS_TOKEN, { expiresIn: 3600 })
 
       res.json({ ...rest, accessToken });
 
@@ -101,8 +105,26 @@ router.route("/login")
   }
   )
 
+// Remove user
+router.route("/user/remove/:id")
+  .delete(verifyUser, async function (req, res) {
+    try {
+      let id = req.params.id;
+      if (!mongoose.Types.ObjectId.isValid(id))
+        return res.send("Invalid Id : " + id);
+      let record = await User.findOneAndDelete({ _id: id }).exec();
+      if (record) {
+        return res.send("Record is deleted Scuccessfully: " +id);
+      }
+      return res.send("No Record Deleted  Invlalid Id : " + id );
+    } catch (err) {
+      return res.send("Error" + err);
+    }
+  });
+
+// Update user
 router.route("/user/:id")
-  .put(validateUpdate,verifyUser, async function (req, res) {
+  .put(validateUpdate, verifyUser, async function (req, res) {
     try {
       const id = req.params.id;
       let updateData = {
