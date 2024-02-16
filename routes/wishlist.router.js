@@ -1,7 +1,6 @@
 const express = require('express');
 
 const verifyUser = require("../middleware/verifyuser");
-const Wishlist = require("../model/wishlist.model");
 const User = require("../model/user.model");
 
 

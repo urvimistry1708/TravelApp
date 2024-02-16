@@ -86,7 +86,6 @@ router.route("/login")
     try {
       const user = await User.findOne({ number: req.body.number });
 
-      console.log(user)
       if (!user) {
         return res.status(401).json({ message: "Incorrect Mobile Number" });
       }

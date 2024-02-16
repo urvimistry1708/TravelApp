@@ -22,8 +22,6 @@ app.use(cors())
 
 connectDB();
 
-//enable CORS
-
 const PORT= 3000;
 app.get("/",(req,res)=>{
     res.send("Hey")
