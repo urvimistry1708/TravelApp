@@ -86,6 +86,7 @@ router.route("/login")
     try {
       const user = await User.findOne({ number: req.body.number });
 
+      console.log(user)
       if (!user) {
         return res.status(401).json({ message: "Incorrect Mobile Number" });
       }
@@ -95,7 +96,7 @@ router.route("/login")
       decodedPassword !== req.body.password && res.status(401).json({ message: "Incorrect Password" });
 
       const { password, ...rest } = user._doc;
-      const accessToken = jwt.sign({ username: user.username }, process.env.ACCESS_TOKEN, { expiresIn: 3600 })
+      const accessToken = jwt.sign({ user: user }, process.env.ACCESS_TOKEN, { expiresIn: 3600 })
 
       res.json({ ...rest, accessToken });
 

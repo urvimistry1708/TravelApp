@@ -8,7 +8,7 @@ const verifyUser = (req, res, next) => {
                 console.log("Any"+err)
                 return res.status(403).json({ message: "Invalid Token" })
             }
-            console.log("Out if!!!!!!!!: "+ user)
+            console.log("Out if!!!!!!!!: "+ user.user._id)
             req.user = user;
             next()
         })

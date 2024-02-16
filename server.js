@@ -1,5 +1,6 @@
 const express= require('express');
 const mongoose= require('mongoose');
+const cors=require('cors');
 
 const hotelRouter=require("./routes/hotel.router");
 const categoryRouter = require("./routes/category.router");
@@ -17,7 +18,11 @@ const app= express();
 
 app.use(express.json())
 
+app.use(cors())
+
 connectDB();
+
+//enable CORS
 
 const PORT= 3000;
 app.get("/",(req,res)=>{
@@ -39,7 +44,7 @@ app.use("/api/wishlist", wishlistRouter);
 mongoose.connection.once("open",()=>{
     console.log("Connected to DB");
     app.listen(process.env.PORT || PORT,()=>{
-        console.log("Server is Up and Running")
+        console.log("Server is Up and Running on port "+PORT);
     })
 })
 
